@@ -60,6 +60,22 @@ class UploadController extends Controller {
         return response()->json($all);
     }
 
+    // ── new public endpoint — only published uploads ──
+    public function published() {
+        return response()->json(
+            Upload::where('status', 'published')->orderByDesc('id')->get()
+        );
+    }
+
+    // ── publish action ────────────────────────────────
+    public function publish($id) {
+        [$prefix, $realId] = $this->parseId($id);
+        $model = $this->resolveModel($prefix);
+        $item  = $model::findOrFail($realId);
+        $item->update(['status' => 'published']);
+        return response()->json($item);
+    }
+
     public function store(Request $request) {
         $upload = Upload::create($request->all());
         return response()->json(['id' => 'upl_' . $upload->id] + $upload->toArray(), 201);
