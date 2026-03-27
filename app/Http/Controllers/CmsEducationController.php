@@ -45,4 +45,23 @@ class CmsEducationController extends Controller {
         CmsEducation::findOrFail($id)->delete();
         return response()->json(['deleted' => true]);
     }
+    public function stream($id) {
+        $item = CmsEducation::findOrFail($id);
+
+        if (!$item->file_url) {
+            return response()->json(['error' => 'No file attached'], 404);
+        }
+
+        $path = str_replace('/storage/', '', $item->file_url);
+        $full = storage_path('app/public/' . $path);
+
+        if (!file_exists($full)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        return response()->file($full, [
+            'Content-Type'        => 'video/mp4',
+            'Content-Disposition' => 'inline',
+        ]);
+    }
 }

@@ -32,7 +32,7 @@ Route::post('/cms/education',                   [CmsEducationController::class, 
 Route::post('/cms/education/{id}',              [CmsEducationController::class, 'update']);
 Route::put('/cms/education/{id}/publish',       [CmsEducationController::class, 'publish']);
 Route::delete('/cms/education/{id}',            [CmsEducationController::class, 'destroy']);
-
+Route::get('/cms/education/{id}/stream',        [CmsEducationController::class, 'stream']);
 // ── cms news ──
 Route::get('/cms/news',                         [CmsNewsController::class, 'index']);
 Route::get('/cms/news/published',               [CmsNewsController::class, 'published']);
