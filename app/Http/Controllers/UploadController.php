@@ -77,7 +77,14 @@ class UploadController extends Controller {
     }
 
     public function store(Request $request) {
-        $upload = Upload::create($request->all());
+        $data = $request->except('file');
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('uploads', 'public');
+            $data['file_url'] = '/storage/' . $path;
+        }
+
+        $upload = Upload::create($data);
         return response()->json(['id' => 'upl_' . $upload->id] + $upload->toArray(), 201);
     }
 
@@ -85,7 +92,15 @@ class UploadController extends Controller {
         [$prefix, $realId] = $this->parseId($id);
         $model = $this->resolveModel($prefix);
         $item  = $model::findOrFail($realId);
-        $item->update($this->filterFields($prefix, $request->all()));
+
+        $data = $request->except('file');
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('uploads', 'public');
+            $data['file_url'] = '/storage/' . $path;
+        }
+
+        $item->update($this->filterFields($prefix, $data));
         return response()->json($item);
     }
 
