@@ -12,4 +12,7 @@ class NewsController extends Controller {
     public function featured() {
         return response()->json(News::where('featured', true)->first());
     }
+    public function show($id) {
+        return response()->json(\App\Models\News::findOrFail($id));
+    }
 }

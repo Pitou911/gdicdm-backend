@@ -13,7 +13,7 @@ Route::get('/news',           [NewsController::class, 'index']);
 Route::get('/news/featured',  [NewsController::class, 'featured']);
 Route::get('/documents',      [DocumentController::class, 'index']);
 Route::get('/resources',      [ResourceController::class, 'index']);
-
+Route::get('/news/{id}', [NewsController::class, 'show']);
 // ── cms dashboard unified table ──
 Route::get('/cms',            [CmsDashboardController::class, 'index']);
 
