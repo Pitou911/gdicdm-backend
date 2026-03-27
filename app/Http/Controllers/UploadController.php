@@ -59,7 +59,19 @@ class UploadController extends Controller {
 
         return response()->json($all);
     }
+    public function download($id) {
+        [$prefix, $realId] = $this->parseId($id);
+        $model  = $this->resolveModel($prefix);
+        $item   = $model::findOrFail($realId);
+        $path   = str_replace('/storage/', '', $item->file_url);
+        $full   = storage_path('app/public/' . $path);
 
+        if (!file_exists($full)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        return response()->download($full);
+    }
     // ── new public endpoint — only published uploads ──
     public function published() {
         return response()->json(
@@ -80,6 +92,9 @@ class UploadController extends Controller {
         $data = $request->except('file');
 
         if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => 'file|mimes:pdf,jpg,jpeg,png,mp4|max:102400',
+            ]);
             $path = $request->file('file')->store('uploads', 'public');
             $data['file_url'] = '/storage/' . $path;
         }
