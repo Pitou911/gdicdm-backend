@@ -4,5 +4,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class CmsDocument extends Model {
     protected $table    = 'cms_documents';
-    protected $fillable = ['type', 'title', 'language', 'file_url', 'date', 'status'];
+    protected $fillable = ['type', 'title', 'language', 'file_url', 'cover_url', 'date', 'status'];
 }

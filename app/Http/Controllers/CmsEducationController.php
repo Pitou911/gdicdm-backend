@@ -14,23 +14,39 @@ class CmsEducationController extends Controller {
     }
 
     public function store(Request $request) {
-        $data = $request->except('file');
+        $data = $request->except(['file', 'cover']);
+
         if ($request->hasFile('file')) {
             $request->validate(['file' => 'file|mimes:pdf,jpg,jpeg,png,mp4|max:102400']);
             $path             = $request->file('file')->store('cms/education', 'public');
             $data['file_url'] = '/storage/' . $path;
         }
+
+        if ($request->hasFile('cover')) {
+            $request->validate(['cover' => 'file|mimes:jpg,jpeg,png|max:10240']);
+            $path              = $request->file('cover')->store('cms/covers', 'public');
+            $data['cover_url'] = '/storage/' . $path;
+        }
+
         return response()->json(CmsEducation::create($data), 201);
     }
 
     public function update(Request $request, $id) {
         $item = CmsEducation::findOrFail($id);
-        $data = $request->except('file');
+        $data = $request->except(['file', 'cover']);
+
         if ($request->hasFile('file')) {
             $request->validate(['file' => 'file|mimes:pdf,jpg,jpeg,png,mp4|max:102400']);
             $path             = $request->file('file')->store('cms/education', 'public');
             $data['file_url'] = '/storage/' . $path;
         }
+
+        if ($request->hasFile('cover')) {
+            $request->validate(['cover' => 'file|mimes:jpg,jpeg,png|max:10240']);
+            $path              = $request->file('cover')->store('cms/covers', 'public');
+            $data['cover_url'] = '/storage/' . $path;
+        }
+
         $item->update($data);
         return response()->json($item);
     }

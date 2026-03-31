@@ -18,23 +18,41 @@ class CmsNewsController extends Controller {
     }
 
     public function store(Request $request) {
-        $data = $request->except('image');
+        $data = $request->except(['file', 'image', 'cover']);
+
+        // news image
         if ($request->hasFile('image')) {
             $request->validate(['image' => 'file|mimes:jpg,jpeg,png|max:10240']);
             $path              = $request->file('image')->store('cms/news', 'public');
             $data['image_url'] = '/storage/' . $path;
         }
+
+        // cover image
+        if ($request->hasFile('cover')) {
+            $request->validate(['cover' => 'file|mimes:jpg,jpeg,png|max:10240']);
+            $path              = $request->file('cover')->store('cms/covers', 'public');
+            $data['cover_url'] = '/storage/' . $path;
+        }
+
         return response()->json(CmsNews::create($data), 201);
     }
 
     public function update(Request $request, $id) {
         $item = CmsNews::findOrFail($id);
-        $data = $request->except('image');
+        $data = $request->except(['image', 'cover']);
+
         if ($request->hasFile('image')) {
             $request->validate(['image' => 'file|mimes:jpg,jpeg,png|max:10240']);
             $path              = $request->file('image')->store('cms/news', 'public');
             $data['image_url'] = '/storage/' . $path;
         }
+
+        if ($request->hasFile('cover')) {
+            $request->validate(['cover' => 'file|mimes:jpg,jpeg,png|max:10240']);
+            $path              = $request->file('cover')->store('cms/covers', 'public');
+            $data['cover_url'] = '/storage/' . $path;
+        }
+
         $item->update($data);
         return response()->json($item);
     }
