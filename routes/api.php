@@ -7,6 +7,12 @@ use App\Http\Controllers\CmsDashboardController;
 use App\Http\Controllers\CmsDocumentController;
 use App\Http\Controllers\CmsEducationController;
 use App\Http\Controllers\CmsNewsController;
+use App\Http\Controllers\AuctionResultController;
+
+Route::get('/auction-results',      [AuctionResultController::class, 'index']);
+Route::post('/auction-results',     [AuctionResultController::class, 'store']);
+Route::put('/auction-results/{id}', [AuctionResultController::class, 'update']);
+Route::delete('/auction-results/{id}', [AuctionResultController::class, 'destroy']);
 
 // ── existing public endpoints (seeded data) ──
 Route::get('/news',           [NewsController::class, 'index']);
