@@ -9,6 +9,13 @@ use App\Http\Controllers\CmsEducationController;
 use App\Http\Controllers\CmsNewsController;
 use App\Http\Controllers\AuctionResultController;
 
+use App\Http\Controllers\AuctionCalendarController;
+
+Route::get('/auction-calendar',      [AuctionCalendarController::class, 'index']);
+Route::post('/auction-calendar',     [AuctionCalendarController::class, 'store']);
+Route::put('/auction-calendar/{id}', [AuctionCalendarController::class, 'update']);
+Route::delete('/auction-calendar/{id}', [AuctionCalendarController::class, 'destroy']);
+
 Route::get('/auction-results',      [AuctionResultController::class, 'index']);
 Route::post('/auction-results',     [AuctionResultController::class, 'store']);
 Route::put('/auction-results/{id}', [AuctionResultController::class, 'update']);
